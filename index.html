@@ -459,7 +459,7 @@
               <tr>
                 <td><b>Plataforma Web de RRHH (Dashboard y Reportes)</b></td>
                 <td>Cálculo manual de horas trabajadas y sueldos.</td>
-                <td>Módulo C (RF01, RF02, RF03 / ISW02, ISW03): Panel administrativo con consultas SQL (JOINs), alertas de impuntualidad y exportación a PDF/Excel.</td>
+                <td>Módulo C (RF01, RF02, RF03 / ISW02, ISW03): Panel administrativo con consultas SQL (JOINs), alertas de impuntualidad y exportación nativa a Excel.</td>
               </tr>
               <tr>
                 <td><b>Tarjetas NFC</b></td>
@@ -598,16 +598,24 @@
 
         <h2 class="section">Módulo C — Página de Recursos Humanos</h2>
         <h3 class="sub">Frontend</h3>
+        <p>Panel de control (dashboard) codificado íntegramente en <b>HTML5, CSS3 y PHP 8</b>, utilizando el framework <b>Bootstrap 5.3</b> para garantizar la adaptabilidad (responsive design). Las vistas principales desarrolladas son:</p>
         <ul>
-          <li><b>Dashboard (index.php):</b> vista general con estado de conexión del reloj en tiempo real, resumen de empleados activos/asistencias y listado dinámico de las últimas 5 fichadas.</li>
-          <li><b>Gestión de Empleados:</b> tabla interactiva con estado (Activo/Inactivo) y modal para altas vinculando el ID de reloj físico.</li>
-          <li><b>Registros Crudos (registros.php):</b> visor completo de entradas/salidas con buscador y modal con re-autenticación de seguridad para cargas manuales o justificaciones.</li>
-          <li><b>Matriz Mensual de Asistencia (asistencia.php):</b> grilla interactiva con mapeo por colores (Verde, Naranja, Azul, Rojo, Gris) según el tipo de fichada.</li>
-          <li><b>Horas Trabajadas y Liquidación:</b> cálculo consolidado por turno con botón de exportación directa a Excel.</li>
-          <li><b>Configuración (configuracion.php):</b> interfaz para parametrización de red, turnos y márgenes de tolerancia.</li>
+          <li><b>login.php:</b> autenticación segura de acceso al panel.</li>
+          <li><b>index.php:</b> dashboard de métricas — estado de conexión del reloj, resumen de empleados activos/asistencias y últimas fichadas.</li>
+          <li><b>empleados.php:</b> CRUD de personal (alta, baja y modificación de legajos).</li>
+          <li><b>registros.php:</b> auditoría de logs crudos, con buscador y carga manual/justificación de marcaciones.</li>
+          <li><b>horas.php:</b> motor de liquidación y exportación de horas trabajadas, llegadas tarde, ausencias y horas extra.</li>
+          <li><b>asistencia.php:</b> matriz visual tipo mapa de calor con mapeo por colores según el tipo de fichada.</li>
         </ul>
+        <p><b>Enrutamiento:</b> la navegación se resuelve del lado del servidor mediante PHP. Se implementó un menú lateral (sidebar) consistente que permite el flujo entre vistas, junto con modales dinámicos de Bootstrap y filtros de búsqueda en tiempo real mediante JavaScript Vanilla, para evitar recargas innecesarias al auditar tablas extensas.</p>
         <h3 class="sub">Backend y base de datos</h3>
-        <p>Desarrollado en <b>PHP</b> respaldado por una base de datos <b>MySQL</b>. Se encarga de procesar las fichadas recibidas, ejecutar la lógica de comparación de turnos con los minutos de tolerancia parametrizados y restringir acciones sensibles solicitando nuevamente la contraseña del administrador.</p>
+        <p>Se configuró un motor relacional <b>MySQL</b>. La estructura cuenta con tres tablas críticas interconectadas:</p>
+        <ul>
+          <li><b>empleados</b> (ID, nombre).</li>
+          <li><b>registros_asistencia</b> (ID, id_empleado, fecha_hora, tipo [entrada/salida]).</li>
+          <li><b>configuracion</b> (parámetros de red y reglas de negocio, como turnos y tolerancias).</li>
+        </ul>
+        <p><b>Endpoints y lógica operativa:</b> el servidor expone rutas lógicas embebidas en los controladores PHP que responden a peticiones HTTP POST para operaciones críticas. Ejemplos implementados: autenticación mediante variables de sesión seguras (<code>$_SESSION</code>), y procesamiento de registros — inserción segura de fichadas manuales y bajas lógicas, protegidas mediante un protocolo de "Confirmación de Privilegios" que exige la contraseña maestra del administrador en el momento de la ejecución del POST.</p>
 
         <div class="footer-nav">
           <a data-goto="usuarios">← Usuarios del sistema</a>
@@ -670,14 +678,13 @@
         <p>El empleado coloca la huella o se identifica por reconocimiento facial. El sistema valida la identidad (match directo contra la memoria del reloj) y registra el momento de entrada o salida.</p>
 
         <h2 class="section">Módulo C — Página de Recursos Humanos</h2>
-        <p>El operador entra al panel de RRHH y solicita el informe de asistencias del día. El frontend dispara una petición asíncrona:</p>
-        <pre><code>GET /api/rrhh/asistencias?fecha=2026-09-14</code></pre>
-        <p>El backend ejecuta una consulta uniendo marcaciones y datos del personal:</p>
+        <p>El operador entra a la página de RRHH y solicita el informe de asistencias del día. El frontend envía una petición HTTP estándar (GET/POST) al servidor mediante los selectores de mes y año.</p>
+        <p>El servidor recibe la solicitud y ejecuta una consulta uniendo marcaciones y datos del personal:</p>
         <pre><code>SELECT e.legajo, e.nombre, f.fecha_hora_fichada, f.tipo_evento
-FROM marcaciones_biometricas f
+FROM registros_asistencia f
 JOIN empleados e ON f.empleado_id = e.id
 WHERE DATE(f.fecha_hora_fichada) = CURDATE();</code></pre>
-        <p>El backend responde con los registros en formato JSON y el frontend del Módulo C dibuja dinámicamente la tabla de presentismo, sin recargar la página.</p>
+        <p>El backend (PHP) procesa la información y renderiza dinámicamente el código HTML de la tabla (Server-Side Rendering), devolviendo la vista actualizada al navegador. El frontend del Módulo C recibe la respuesta y dibuja la tabla de presentismo en la pantalla sin recargar la página.</p>
 
         <div class="footer-nav">
           <a data-goto="design-system">← Design system</a>
@@ -715,9 +722,9 @@ WHERE DATE(f.fecha_hora_fichada) = CURDATE();</code></pre>
         <div class="table-wrap">
           <table>
             <tr><th style="width:22%">Componente</th><th>Criterio mínimo exigible</th></tr>
-            <tr><td>Frontend</td><td>Dashboard con tablas dinámicas de asistencias, formularios con validación en tiempo real para alta/modificación de empleados (CRUD de legajos), gestión de licencias/novedades, filtros por rango de fechas/departamento y exportación directa de reportes (PDF/Excel).</td></tr>
-            <tr><td>Backend &amp; base de datos</td><td>Servidor web (PHP) y base de datos relacional (MySQL). Arquitectura RESTful para peticiones asíncronas (AJAX/Fetch), sentencias SQL preparadas (SELECT, INSERT, UPDATE) con JOINs entre empleados, marcaciones y licencias, y manejo seguro de sesiones administrativas.</td></tr>
-            <tr><td>Integración &amp; protocolos</td><td>Comunicación vía HTTP/HTTPS con peticiones JSON en tiempo real. Recepción automática de los registros enviados por el bridge del reloj biométrico, y uso de librerías de servidor para exportar reportes en Excel/PDF.</td></tr>
+            <tr><td>Frontend</td><td>Interfaz web interactiva con dashboard de tablas dinámicas para la lectura de asistencias, formularios con validación en tiempo real para el alta/modificación de empleados (CRUD de legajos), gestión de licencias/novedades, controles de filtrado por rango de fechas/departamento y botones para la exportación directa de reportes a Excel.</td></tr>
+            <tr><td>Backend &amp; base de datos</td><td>Servidor web (PHP) y base de datos relacional (MySQL). Arquitectura basada en renderizado del lado del servidor (Server-Side Rendering) con procesamiento de peticiones HTTP POST estándar para transacciones seguras.</td></tr>
+            <tr><td>Integración &amp; protocolos</td><td>Generación nativa de reportes exportables a Excel (.xls) mediante la inyección directa de cabeceras HTTP en PHP, garantizando un rendimiento óptimo sin depender de librerías externas.</td></tr>
           </table>
         </div>
 
@@ -743,6 +750,31 @@ WHERE DATE(f.fecha_hora_fichada) = CURDATE();</code></pre>
               <td><b>CU-03</b> — El usuario interactúa con los canales de comunicación o completa el formulario.</td>
               <td>Botón/ícono flotante de WhatsApp (API <code>wa.me</code>), enlace <code>mailto:</code>, e ícono con enlace directo al perfil de Instagram.</td>
               <td>—</td>
+            </tr>
+          </table>
+        </div>
+
+        <h3 class="sub">Módulo C: Página de Recursos Humanos</h3>
+        <div class="table-wrap">
+          <table>
+            <tr><th style="width:20%">Requerimiento</th><th style="width:18%">Caso de uso</th><th style="width:31%">Vista del frontend</th><th>Respaldo en backend</th></tr>
+            <tr>
+              <td><b>RF01</b> — La plataforma debe permitir al personal de RRHH consultar en tiempo real las marcaciones de entrada y salida registradas por el reloj biométrico.</td>
+              <td><b>CU01</b> — El responsable de RRHH ingresa al panel principal, selecciona la fecha de hoy y visualiza el listado completo de empleados con sus horarios de llegada.</td>
+              <td>Dashboard interactivo con tabla de presentismo, tarjetas con métricas en tiempo real (presentes, ausentes, llegadas tarde) y filtros por fecha, turno o departamento.</td>
+              <td>Renderizado directo de la estructura en HTML mediante procesamiento del lado del servidor (PHP).</td>
+            </tr>
+            <tr>
+              <td><b>RF02</b> — La herramienta debe permitir exportar los reportes de horas trabajadas, llegadas tarde, ausencias y horas extra en formato Excel.</td>
+              <td><b>CU02</b> — A fin de mes, el administrativo filtra las asistencias del período y presiona "Descargar Reporte de Horas" para la liquidación de sueldos.</td>
+              <td>Botón de acción rápida ("Exportar a Excel") con selectores de período mensual y campos de selección de columnas a incluir.</td>
+              <td>Generación dinámica de archivos leyendo los datos agregados del período y enviándolos como descarga directa.</td>
+            </tr>
+            <tr>
+              <td><b>RF03</b> — El sistema debe permitir dar de alta, modificar, dar de baja y consultar la información laboral de cada empleado.</td>
+              <td><b>CU03</b> — El operador de RRHH registra a un nuevo empleado completando su legajo, DNI, área de trabajo y vinculando su ID de enrolamiento biométrico.</td>
+              <td>Formulario modal de registro de empleados con validaciones visuales, tabla desplegable de personal activo y botón de edición/baja lógica.</td>
+              <td>Controladores PHP que procesan peticiones HTTP POST estructuradas para las acciones del CRUD, sanitizan las entradas y actualizan la tabla <code>empleados</code> en MySQL de forma segura.</td>
             </tr>
           </table>
         </div>
