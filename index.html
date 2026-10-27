@@ -481,7 +481,7 @@
         </div>
       </section>
 
-      <!-- =================== 01 OBJETIVO Y MÓDULOS =================== -->
+      <!-- =================== OBJETIVO Y MÓDULOS =================== -->
       <section class="page" id="page-objetivo">
         <div class="eyebrow"><span class="bar"></span>02 · Proyecto</div>
         <h1 class="h-title">Objetivo y módulos del sistema</h1>
@@ -506,14 +506,14 @@
         </div>
       </section>
 
-      <!-- =================== 00 USUARIOS DEL SISTEMA =================== -->
+      <!-- =================== USUARIOS DEL SISTEMA =================== -->
       <section class="page" id="page-usuarios">
         <div class="eyebrow"><span class="bar"></span>03 · Documentación técnica y diseño</div>
         <h1 class="h-title">Usuarios del sistema</h1>
         <p class="h-sub">Definición de perfiles, formación técnica y actividades asignadas a cada tipo de usuario en el ecosistema TA-DIN.</p>
 
         <div class="meta-grid">
-          <div><span class="k">Perfiles</span><span class="v">4 roles</span></div>
+          <div><span class="k">Perfiles</span><span class="v">3 roles</span></div>
           <div><span class="k">Personal Operativo</span><span class="v">10 empleados</span></div>
           <div><span class="k">Administración</span><span class="v">1 socia (Silvana Bravo)</span></div>
           <div><span class="k">Soporte Técnico</span><span class="v">2–3 integrantes</span></div>
@@ -540,13 +540,6 @@
             <p style="margin-bottom:8px;"><b>Formación / Alcance:</b> 2 o 3 integrantes del equipo de proyecto.</p>
             <p><b>Actividades asignadas:</b> Instalación física del reloj biométrico, montaje, cableado de red Ethernet, parametrización de red (IP estática, máscara, gateway) y vinculación inicial del hardware con el middleware ZKBioTime.Net y la base de datos MySQL.</p>
           </div>
-
-          <div class="mod-card">
-            <span class="tag">PERFIL APODERADO</span>
-            <h4>Apoderado / Encargado de Planta (Sergio Bravo)</h4>
-            <p style="margin-bottom:8px;"><b>Formación / Entorno:</b> Apoderado legal de la empresa.</p>
-            <p><b>Actividades asignadas:</b> Atención y gestión con clientes, supervisión y asignación de tareas al personal operativo, y coordinación/gestión del trabajo manual.</p>
-          </div>
         </div>
 
         <div class="footer-nav">
@@ -555,626 +548,111 @@
         </div>
       </section>
 
-      <!-- =================== 02 REQUISITOS =================== -->
+      <!-- =================== REQUISITOS POR CAPAS =================== -->
       <section class="page" id="page-requisitos">
         <div class="eyebrow"><span class="bar"></span>04 · Documentación técnica y diseño</div>
-        <h1 class="h-title">Requisitos por capas del desarrollo</h1>
-        <p class="h-sub">Frontend, backend y base de datos de cada módulo.</p>
-
-        <h2 class="section">Módulo A — Página web</h2>
-        <h3 class="sub">Frontend</h3>
-        <ul>
-          <li><b>Vistas clave:</b> interfaz completamente codificada para Home y el Dashboard/catálogo principal, basadas en el mockup.</li>
-          <li><b>Navegación fluida:</b> enrutamiento real entre vistas sin recargas innecesarias de página.</li>
-        </ul>
-        <h3 class="sub">Backend y base de datos</h3>
-        <p>El sitio comercial fue concebido bajo una arquitectura estática orientada a la presentación institucional, por lo cual prescinde de un motor de base de datos activa: toda la información está estructurada directamente en el código fuente (HTML5 y CSS3).</p>
-        <p>No existe procesamiento de transacciones SQL ni registro de usuarios en el servidor web, dado que el objetivo del sitio es mostrar contenido, derivar tráfico a canales directos (WhatsApp / Email) y recolectar consultas mediante un formulario de Google embebido, cuyas respuestas se almacenan en Google Drive / Sheets.</p>
-        <p>Los archivos estáticos se despliegan directamente en el hosting <b>DonWeb</b> mediante el cliente FTP <b>FileZilla</b>, sobre el dominio propio del proyecto.</p>
-
-        <h2 class="section">Módulo B — Reloj biométrico</h2>
-        <h3 class="sub">Frontend</h3>
-        <p><b>Interfaz de empleado (marcación rápida):</b></p>
-        <ul>
-          <li>Pantalla de espera: reloj digital en tiempo real y mensaje de instrucción para colocar la huella.</li>
-          <li>Confirmación: al detectar la huella, muestra por 2 segundos la foto del empleado, nombre, hora y un indicador visual (verde = éxito / rojo = error).</li>
-        </ul>
-        <p><b>Panel de administrador (navegación lateral):</b></p>
-        <ul>
-          <li>Dashboard con gráficos en tiempo real del estado del personal (presentes, ausentes, llegadas tarde).</li>
-          <li>Gestión de usuarios: registro de empleados y enrolamiento de huellas.</li>
-          <li>Reportes: filtros para consultar y exportar el historial de asistencia.</li>
-          <li>Configuración: sincronización del dispositivo y horarios.</li>
-        </ul>
-        <h3 class="sub">Backend y base de datos</h3>
-        <p>El sistema se implementa mediante el middleware oficial <b>ZKBioTime.Net</b>, que gestiona una base de datos activa para el almacenamiento y estructuración de la información. Por defecto instala y opera con una base de datos local ligera (<b>SQLite</b>), aunque su arquitectura permite conectarse a motores más robustos como SQL Server, MySQL o PostgreSQL.</p>
-        <p>Dos entidades concentran la lógica de negocio:</p>
-        <ul>
-          <li><b>Tabla de usuarios:</b> perfiles del personal — ID_Usuario, Nombre, Apellido y las plantillas biométricas codificadas (huellas y rostros).</li>
-          <li><b>Tabla de registros (logs de asistencia):</b> vinculada a la tabla de usuarios; registra ID_Registro, ID_Usuario, FechaHora_Marcacion y Tipo_Movimiento (entrada o salida).</li>
-        </ul>
-        <h3 class="sub">Comunicación y protocolo</h3>
-        <p>El reloj biométrico y ZKBioTime.Net no se comunican mediante endpoints HTTP tradicionales (GET/POST de una API REST). La comunicación es directa y constante dentro de la red local vía <b>TCP/IP</b>, por el <code>puerto 4370</code>, usando un protocolo propietario del fabricante para autenticar al administrador del equipo o solicitar la descarga de logs.</p>
-
-        <h2 class="section">Módulo C — Página de Recursos Humanos</h2>
-        <h3 class="sub">Frontend</h3>
-        <p>Panel de control (dashboard) codificado íntegramente en <b>HTML5, CSS3 y PHP 8</b>, utilizando el framework <b>Bootstrap 5.3</b> para garantizar la adaptabilidad (responsive design). Las vistas principales desarrolladas son:</p>
-        <ul>
-          <li><b>login.php:</b> autenticación segura de acceso al panel.</li>
-          <li><b>index.php:</b> dashboard de métricas — estado de conexión del reloj, resumen de empleados activos/asistencias y últimas fichadas.</li>
-          <li><b>empleados.php:</b> CRUD de personal (alta, baja y modificación de legajos).</li>
-          <li><b>registros.php:</b> auditoría de logs crudos, con buscador y carga manual/justificación de marcaciones.</li>
-          <li><b>horas.php:</b> motor de liquidación y exportación de horas trabajadas, llegadas tarde, ausencias y horas extra.</li>
-          <li><b>asistencia.php:</b> matriz visual tipo mapa de calor con mapeo por colores según el tipo de fichada.</li>
-        </ul>
-        <p><b>Enrutamiento:</b> la navegación se resuelve del lado del servidor mediante PHP. Se implementó un menú lateral (sidebar) consistente que permite el flujo entre vistas, junto con modales dinámicos de Bootstrap y filtros de búsqueda en tiempo real mediante JavaScript Vanilla, para evitar recargas innecesarias al auditar tablas extensas.</p>
-        <h3 class="sub">Backend y base de datos</h3>
-        <p>Se configuró un motor relacional <b>MySQL</b>. La estructura cuenta con tres tablas críticas interconectadas:</p>
-        <ul>
-          <li><b>empleados</b> (ID, nombre).</li>
-          <li><b>registros_asistencia</b> (ID, id_empleado, fecha_hora, tipo [entrada/salida]).</li>
-          <li><b>configuracion</b> (parámetros de red y reglas de negocio, como turnos y tolerancias).</li>
-        </ul>
-        <p><b>Endpoints y lógica operativa:</b> el servidor expone rutas lógicas embebidas en los controladores PHP que responden a peticiones HTTP POST para operaciones críticas. Ejemplos implementados: autenticación mediante variables de sesión seguras (<code>$_SESSION</code>), y procesamiento de registros — inserción segura de fichadas manuales y bajas lógicas, protegidas mediante un protocolo de "Confirmación de Privilegios" que exige la contraseña maestra del administrador en el momento de la ejecución del POST.</p>
-
-        <div class="footer-nav">
-          <a data-goto="usuarios">← Usuarios del sistema</a>
-          <a data-goto="design-system">Siguiente: Design system →</a>
-        </div>
+        <h1 class="h-title">Requisitos por capas</h1>
+        <p class="h-sub">Especificación de requerimientos funcionales y no funcionales del sistema.</p>
+        <p>Los requerimientos están divididos según su impacto en las diferentes capas de la arquitectura (Frontend, Backend, Hardware y Base de Datos).</p>
       </section>
 
-      <!-- =================== 05 DESIGN SYSTEM =================== -->
+      <!-- =================== DESIGN SYSTEM =================== -->
       <section class="page" id="page-design-system">
         <div class="eyebrow"><span class="bar"></span>05 · Documentación técnica y diseño</div>
-        <h1 class="h-title">Design system del sitio web</h1>
-        <p class="h-sub">Paleta, tipografía, breakpoints y comportamiento de menú del Módulo A.</p>
-
-        <h3 class="sub">Colores de fondo</h3>
-        <p><b>Claro:</b> <code>#FDFDFB</code> como fondo general de la página, <code>#EAECF2</code> para la sección de soluciones. Las tarjetas de contenido usan blanco <code>#FFFFFF</code>.</p>
-        <p><b>Oscuro:</b> <code>#111E2E</code> para secciones completas (Identidad, barra de métricas), con un degradado radial combinado con <code>#1A2D44</code> en la sección de inicio. El pie de página usa <code>#09111A</code>.</p>
-        <div style="display:flex;gap:14px;flex-wrap:wrap;margin:14px 0 26px;">
-          <div class="swatch-row"><span class="swatch" style="background:#FDFDFB;"></span>#FDFDFB</div>
-          <div class="swatch-row"><span class="swatch" style="background:#EAECF2;"></span>#EAECF2</div>
-          <div class="swatch-row"><span class="swatch" style="background:#111E2E;"></span>#111E2E</div>
-          <div class="swatch-row"><span class="swatch" style="background:#1A2D44;"></span>#1A2D44</div>
-          <div class="swatch-row"><span class="swatch" style="background:#09111A;"></span>#09111A</div>
-          <div class="swatch-row"><span class="swatch" style="background:#243D5C;"></span>#243D5C</div>
-        </div>
-
-        <h3 class="sub">Color de fuente</h3>
-        <ul>
-          <li><b>Principal:</b> <code>#111E2E</code> para cuerpo de texto y títulos.</li>
-          <li><b>Secundario:</b> <code>#5A6571</code> para descripciones breves o subtítulos.</li>
-          <li><b>Sobre fondos oscuros:</b> variantes claras basadas en blanco <code>#FFFEEE</code>, con opacidades como <code>rgba(253,253,251,0.65)</code> o <code>rgba(253,253,251,0.45)</code>.</li>
-        </ul>
-
-        <div class="footer-nav">
-          <a data-goto="requisitos">← Requisitos por capas</a>
-          <a data-goto="flujos">Siguiente: Flujos de integración →</a>
-        </div>
+        <h1 class="h-title">Design System</h1>
+        <p class="h-sub">Guía de estilos, paleta de colores y componentes visuales del proyecto.</p>
       </section>
 
-      <!-- =================== 03 FLUJOS =================== -->
+      <!-- =================== FLUJOS DE INTEGRACIÓN =================== -->
       <section class="page" id="page-flujos">
         <div class="eyebrow"><span class="bar"></span>06 · Documentación técnica y diseño</div>
-        <h1 class="h-title">Flujos de integración requerido</h1>
-        <p class="h-sub">El recorrido del usuario y el recorrido invisible de los datos, módulo por módulo.</p>
-
-        <h2 class="section">Módulo A — Página web</h2>
-        <h3 class="sub">Flujo de usuarios (B2B)</h3>
-        <p>Describe el recorrido de un cliente potencial desde que aterriza en la web hasta que se convierte en un contacto calificado.</p>
-        <ol class="steps">
-          <li><b>Landing y descubrimiento.</b> Llega a la home, ve el logo, la propuesta de valor (recubrimiento industrial en polvo) y el botón de scroll. La barra de métricas valida de un vistazo la solidez de la empresa: años de trayectoria, certificaciones ISO 9001/14001 y sectores atendidos.</li>
-          <li><b>Evaluación de confianza.</b> En "Nosotros" profundiza en la historia y en el aval de los sistemas de gestión. En "Soluciones" busca su industria (Petróleo, Energía, Telecomunicaciones o Minería) para ver si el servicio se adapta a lo que necesita. Consulta Misión, Visión y los diferenciadores (velocidad de respuesta, procesos auditados).</li>
-          <li><b>Conversión.</b> Decide actuar por uno de tres canales: WhatsApp (botón CTA "Contactar un Asesor" para respuesta inmediata), Email (mailto para pedir un pliego técnico o cotización) o Instagram (para ver proyectos ejecutados).</li>
-        </ol>
-        <h3 class="sub">Flujo de datos del negocio</h3>
-        <p>El flujo comienza con parámetros embebidos en el código —como el <code>subject=Consulta%20desde%20Sitio%20Web</code> del mailto, o el texto pre-armado del enlace de WhatsApp— que permiten identificar que el lead proviene del sitio institucional. Luego se enruta: los contactos directos van a los canales de atención inmediata (asesor técnico); las solicitudes de cotización formal o consultas técnicas se dirigen al formulario embebido.</p>
-
-        <h2 class="section">Módulo B — Reloj biométrico</h2>
-        <h3 class="sub">Registro / enrolamiento</h3>
-        <p>En la pantalla del terminal se ingresan los datos del empleado (legajo, DNI) y se captura su huella, rostro o PIN. La base de datos ejecuta un <code>INSERT INTO empleados</code> guardando el perfil y la plantilla biométrica de forma segura.</p>
-        <h3 class="sub">Fichada validada</h3>
-        <p>El empleado coloca la huella o se identifica por reconocimiento facial. El sistema valida la identidad (match directo contra la memoria del reloj) y registra el momento de entrada o salida.</p>
-
-        <h2 class="section">Módulo C — Página de Recursos Humanos</h2>
-        <p>El operador entra a la página de RRHH y solicita el informe de asistencias del día. El frontend envía una petición HTTP estándar (GET/POST) al servidor mediante los selectores de mes y año.</p>
-        <p>El servidor recibe la solicitud y ejecuta una consulta uniendo marcaciones y datos del personal:</p>
-        <pre><code>SELECT e.legajo, e.nombre, f.fecha_hora_fichada, f.tipo_evento
-FROM registros_asistencia f
-JOIN empleados e ON f.empleado_id = e.id
-WHERE DATE(f.fecha_hora_fichada) = CURDATE();</code></pre>
-        <p>El backend (PHP) procesa la información y renderiza dinámicamente el código HTML de la tabla (Server-Side Rendering), devolviendo la vista actualizada al navegador. El frontend del Módulo C recibe la respuesta y dibuja la tabla de presentismo en la pantalla sin recargar la página.</p>
-
-        <div class="footer-nav">
-          <a data-goto="design-system">← Design system</a>
-          <a data-goto="matriz">Siguiente: Matriz de evaluación →</a>
-        </div>
+        <h1 class="h-title">Flujos de integración</h1>
+        <p class="h-sub">Esquemas de comunicación entre el reloj biométrico, el servidor y la interfaz web.</p>
       </section>
 
-      <!-- =================== 04 MATRIZ =================== -->
+      <!-- =================== MATRIZ DE EVALUACIÓN =================== -->
       <section class="page" id="page-matriz">
         <div class="eyebrow"><span class="bar"></span>07 · Documentación técnica y diseño</div>
-        <h1 class="h-title">Matriz de evaluación del avance</h1>
-        <p class="h-sub">Criterio mínimo exigible por componente, y el mockup interactivo validado con el cliente.</p>
-
-        <h2 class="section">Módulo A — Página web</h2>
-        <div class="table-wrap">
-          <table>
-            <tr><th style="width:22%">Componente</th><th>Criterio mínimo exigible</th></tr>
-            <tr><td>Frontend</td><td>Sitio institucional responsivo maquetado en HTML5 y CSS3. Vistas completas para Home, Nosotros, Soluciones y Contacto. Navegación fluida por enrutamiento nativo del navegador. Desarrollo estático sin frameworks pesados. Breakpoints optimizados para escritorio (1180px) y móviles (≤720px).</td></tr>
-            <tr><td>Backend &amp; base de datos</td><td>Base de datos MySQL estructurada in el hosting (DonWeb), tablas vinculadas y scripts de conexión en PHP. Procesamiento backend en PHP.</td></tr>
-            <tr><td>Integración de consultas</td><td>Formulario de captación de leads embebido nativamente. Integración de Google Forms; las respuestas se consolidan automáticamente en Google Drive / Sheets para su gestión manual.</td></tr>
-          </table>
-        </div>
-
-        <h2 class="section">Módulo B — Reloj biométrico</h2>
-        <div class="table-wrap">
-          <table>
-            <tr><th style="width:22%">Componente</th><th>Criterio mínimo exigible</th></tr>
-            <tr><td>Frontend / interfaz hardware</td><td>Interfaz de fichaje rápido (reloj en tiempo real, confirmación visual/sonora con foto, nombre y estado) y panel administrador para supervisión. Interfaz en software ZKBioTime para gestión de personal, enrolamiento biométrico y exportación de reportes.</td></tr>
-            <tr><td>Backend &amp; base de datos</td><td>Persistencia de usuarios y logs de marcación en la base de datos propia del entorno ZKTeco (SQLite/local). Visualización y administración mediante ZKBioTime.Net.</td></tr>
-            <tr><td>Integración &amp; protocolos</td><td>Comunicación directa en red local entre el dispositivo y la PC/servidor que corre ZKTeco. Transmisión de eventos de fichada por protocolo TCP/IP propietario, puerto 4370.</td></tr>
-          </table>
-        </div>
-
-        <h2 class="section">Módulo C — Página de Recursos Humanos</h2>
-        <div class="table-wrap">
-          <table>
-            <tr><th style="width:22%">Componente</th><th>Criterio mínimo exigible</th></tr>
-            <tr><td>Frontend</td><td>Interfaz web interactiva con dashboard de tablas dinámicas para la lectura de asistencias, formularios con validación en tiempo real para el alta/modificación de empleados (CRUD de legajos), gestión de licencias/novedades, controles de filtrado por rango de fechas/departamento y botones para la exportación directa de reportes a Excel.</td></tr>
-            <tr><td>Backend &amp; base de datos</td><td>Servidor web (PHP) y base de datos relacional (MySQL). Arquitectura basada en renderizado del lado del servidor (Server-Side Rendering) con procesamiento de peticiones HTTP POST estándar para transacciones seguras.</td></tr>
-            <tr><td>Integración &amp; protocolos</td><td>Generación nativa de reportes exportables a Excel (.xls) mediante la inyección directa de cabeceras HTTP en PHP, garantizando un rendimiento óptimo sin depender de librerías externas.</td></tr>
-          </table>
-        </div>
-
-        <h2 class="section">Mockup interactivo — validación con el cliente</h2>
-        <h3 class="sub">Módulo A: Página web</h3>
-        <div class="table-wrap">
-          <table>
-            <tr><th style="width:20%">Requerimiento</th><th style="width:18%">Caso de uso</th><th style="width:31%">Vista del frontend</th><th>Respaldo en backend</th></tr>
-            <tr>
-              <td><b>RF-01</b> — Presentar la identidad institucional (quiénes son, servicios y contacto), adaptable a cualquier dispositivo.</td>
-              <td><b>CU-01</b> — Visualizar información institucional de TA-DIN.</td>
-              <td>Vistas de Inicio, Nosotros, Soluciones, Identidad, ¿Por qué elegirnos? y Contacto, maquetadas en HTML5/CSS3.</td>
-              <td>Sitio 100% estático: sin base de datos, lógica dinámica ni transacciones. Archivos subidos directo al hosting DonWeb por FTP (FileZilla). El servidor solo despacha el archivo estático inicial; la navegación queda en manos del enrutamiento nativo del navegador.</td>
-            </tr>
-            <tr>
-              <td><b>RF-02</b> — Formulario de consulta que valide en el cliente los campos clave (Nombre, Email, Teléfono, Mensaje).</td>
-              <td><b>CU-02</b> — El cliente potencial envía una consulta.</td>
-              <td>Formulario público de Google Forms embebido: ligero, responsivo y con vista de respuestas que se actualiza automáticamente.</td>
-              <td>Google Forms se conecta al ecosistema de Google Drive; TA-DIN tiene registro de todas sus consultas ahí.</td>
-            </tr>
-            <tr>
-              <td><b>RF-03</b> — Permitir contacto por WhatsApp o mail, ver Instagram y completar el formulario.</td>
-              <td><b>CU-03</b> — El usuario interactúa con los canales de comunicación o completa el formulario.</td>
-              <td>Botón/ícono flotante de WhatsApp (API <code>wa.me</code>), enlace <code>mailto:</code>, e ícono con enlace directo al perfil de Instagram.</td>
-              <td>—</td>
-            </tr>
-          </table>
-        </div>
-
-        <h3 class="sub">Módulo C: Página de Recursos Humanos</h3>
-        <div class="table-wrap">
-          <table>
-            <tr><th style="width:20%">Requerimiento</th><th style="width:18%">Caso de uso</th><th style="width:31%">Vista del frontend</th><th>Respaldo en backend</th></tr>
-            <tr>
-              <td><b>RF01</b> — La plataforma debe permitir al personal de RRHH consultar en tiempo real las marcaciones de entrada y salida registradas por el reloj biométrico.</td>
-              <td><b>CU01</b> — El responsable de RRHH ingresa al panel principal, selecciona la fecha de hoy y visualiza el listado completo de empleados con sus horarios de llegada.</td>
-              <td>Dashboard interactivo con tabla de presentismo, tarjetas con métricas en tiempo real (presentes, ausentes, llegadas tarde) y filtros por fecha, turno o departamento.</td>
-              <td>Renderizado directo de la estructura en HTML mediante procesamiento del lado del servidor (PHP).</td>
-            </tr>
-            <tr>
-              <td><b>RF02</b> — La herramienta debe permitir exportar los reportes de horas trabajadas, llegadas tarde, ausencias y horas extra en formato Excel.</td>
-              <td><b>CU02</b> — A fin de mes, el administrativo filtra las asistencias del período y presiona "Descargar Reporte de Horas" para la liquidación de sueldos.</td>
-              <td>Botón de acción rápida ("Exportar a Excel") con selectores de período mensual y campos de selección de columnas a incluir.</td>
-              <td>Generación dinámica de archivos leyendo los datos agregados del período y enviándolos como descarga directa.</td>
-            </tr>
-            <tr>
-              <td><b>RF03</b> — El sistema debe permitir dar de alta, modificar, dar de baja y consultar la información laboral de cada empleado.</td>
-              <td><b>CU03</b> — El operador de RRHH registra a un nuevo empleado completando su legajo, DNI, área de trabajo y vinculando su ID de enrolamiento biométrico.</td>
-              <td>Formulario modal de registro de empleados con validaciones visuales, tabla desplegable de personal activo y botón de edición/baja lógica.</td>
-              <td>Controladores PHP que procesan peticiones HTTP POST estructuradas para las acciones del CRUD, sanitizan las entradas y actualizan la tabla <code>empleados</code> en MySQL de forma segura.</td>
-            </tr>
-          </table>
-        </div>
-
-        <div class="footer-nav">
-          <a data-goto="flujos">← Flujos de integración</a>
-          <a data-goto="gantt">Siguiente: Gantt →</a>
-        </div>
+        <h1 class="h-title">Matriz de evaluación</h1>
+        <p class="h-sub">Criterios de validación y pruebas de aceptación del sistema.</p>
       </section>
 
-      <!-- =================== 06 SEGUIMIENTO - GANTT =================== -->
+      <!-- =================== GANTT =================== -->
       <section class="page" id="page-gantt">
         <div class="eyebrow"><span class="bar"></span>08 · Seguimiento</div>
         <h1 class="h-title">Diagrama de Gantt</h1>
-        <p class="h-sub">Planificación cronológica y asignación de fases temporales para el desarrollo del ecosistema TA-DIN en el periodo 2026.</p>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Fase / Tarea</th>
-                <th style="text-align:center;">Abr</th>
-                <th style="text-align:center;">May</th>
-                <th style="text-align:center;">Jun</th>
-                <th style="text-align:center;">Jul</th>
-                <th style="text-align:center;">Ago</th>
-                <th style="text-align:center;">Sep</th>
-                <th style="text-align:center;">Oct</th>
-                <th style="text-align:center;">Nov</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b>Relevamiento y Entrevistas</b></td>
-                <td colspan="3" style="background:var(--accent-2); opacity:0.8; color:#fff; text-align:center; font-size:12px; border-radius:4px;">Entrevistas & Mockup</td>
-                <td colspan="5"></td>
-              </tr>
-              <tr>
-                <td><b>Módulo A — Sitio Web</b></td>
-                <td></td>
-                <td colspan="3" style="background:var(--accent-2); color:#fff; text-align:center; font-size:12px; border-radius:4px;">HTML/CSS & Google Forms</td>
-                <td colspan="4"></td>
-              </tr>
-              <tr>
-                <td><b>Módulo B — Reloj Biométrico</b></td>
-                <td colspan="3" style="background:var(--accent-2); color:#fff; text-align:center; font-size:12px; border-radius:4px;">ZKTeco & Biometría</td>
-                <td colspan="5"></td>
-              </tr>
-              <tr>
-                <td><b>Módulo C — Panel RRHH</b></td>
-                <td colspan="2"></td>
-                <td colspan="4" style="background:var(--accent); color:#fff; text-align:center; font-size:12px; border-radius:4px;">PHP / MySQL & Reportes</td>
-                <td colspan="2"></td>
-              </tr>
-              <tr>
-                <td><b>Pruebas e Integración ISO</b></td>
-                <td colspan="5"></td>
-                <td colspan="2" style="background:var(--accent-2); opacity:0.8; color:#fff; text-align:center; font-size:12px; border-radius:4px;">Testing General</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><b>Cierre y Presentation Final</b></td>
-                <td colspan="7"></td>
-                <td style="background:#28a745; color:#fff; text-align:center; font-size:12px; border-radius:4px;">Defensa</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="footer-nav">
-          <a data-goto="matriz">← Matriz de evaluación</a>
-          <a data-goto="bitacora">Siguiente: Bitácora del proyecto →</a>
-        </div>
+        <p class="h-sub">Cronograma de tareas y etapas de desarrollo del proyecto TA-DIN.</p>
       </section>
 
-      <!-- =================== 07 SEGUIMIENTO - BITÁCORA =================== -->
+      <!-- =================== BITÁCORA =================== -->
       <section class="page" id="page-bitacora">
         <div class="eyebrow"><span class="bar"></span>09 · Seguimiento</div>
         <h1 class="h-title">Bitácora del proyecto</h1>
-        <p class="h-sub">Línea de tiempo detallada con hitos, avances y estructuración del proyecto mes a mes (abril – septiembre 2026).</p>
-
-        <div class="timeline">
-          <div class="t-month">Abril 2026</div>
-          <div class="t-item"><div class="t-date">15 de abril</div><span class="t-label">Hito</span>Primera entrevista realizada.</div>
-          <div class="t-item"><div class="t-date">24 de abril</div><span class="t-label">Avance</span>Primeros desarrollos con el reloj biométrico.<br><span class="t-label" style="margin-top:4px;display:inline-block;">Planificación</span>Preparación de la primera presentación y definición de roles del equipo.</div>
-
-          <div class="t-month">Mayo 2026</div>
-          <div class="t-item"><div class="t-date">6 de mayo</div><span class="t-label">Hito</span>Primera presentación oficial.</div>
-          <div class="t-item"><div class="t-date">30 de mayo</div><span class="t-label">Planificación</span>Elaboración del primer diagrama de Gantt.<br><span class="t-label" style="margin-top:4px;display:inline-block;">Avance</span>Finalización del armado de la presentación para los módulos A y B.</div>
-
-          <div class="t-month">Junio 2026</div>
-          <div class="t-item"><div class="t-date">12 de junio</div><span class="t-label">Hito</span>Segunda entrevista realizada.<br><span class="t-label" style="margin-top:4px;display:inline-block;">Avance</span>Primeros desarrollos en la página web e integración exitosa del reloj biométrico con el software ZKTeco.</div>
-          <div class="t-item"><div class="t-date">19 de junio</div><span class="t-label">Planificación</span>Elaboración del segundo diagrama de Gantt.</div>
-          <div class="t-item"><div class="t-date">26 de junio</div><span class="t-label">Avance</span>Progreso en el desarrollo de la página web y creación del formulario para clientes.<br><span class="t-label" style="margin-top:4px;display:inline-block;">Preparación</span>Organización de la información para la segunda presentación.</div>
-
-          <div class="t-month">Julio 2026</div>
-          <div class="t-item"><span class="t-label">Hito</span>Segunda presentación.</div>
-          <div class="t-item"><span class="t-label">Avance</span>Corrección y mejora de detalles de la página web.<br><span class="t-label" style="margin-top:4px;display:inline-block;">Avance</span>Inicio del desarrollo de la página de Recursos Humanos.</div>
-
-          <div class="t-month">Agosto 2026</div>
-          <div class="t-item"><span class="t-label">Documentación</span>Actualización de la documentación.</div>
-          <div class="t-item"><span class="t-label">Avance</span>Continuación del desarrollo de la página de Recursos Humanos y vinculación con el reloj biométrico.</div>
-          <div class="t-item"><span class="t-label">Planificación</span>Elaboración del tercer diagrama de Gantt.</div>
-
-          <div class="t-month">Septiembre 2026</div>
-          <div class="t-item"><span class="t-label">Avance</span>Adquisición de las tarjetas NFC.<br><span class="t-label" style="margin-top:4px;display:inline-block;">Avance</span>Vinculación de las tarjetas NFC con la página web de la empresa.<br><span class="t-label" style="margin-top:4px;display:inline-block;">Avance</span>Diseño y personalización de las tarjetas NFC.</div>
-          <div class="t-item"><span class="t-label">Avance</span>Últimos ajustes en la página de Recursos Humanos.</div>
-          <div class="t-item"><div class="t-date">18 de septiembre</div><span class="t-label">Hito</span>Tercera entrevista con los encargados de TADIN.<br><span class="t-label" style="margin-top:4px;display:inline-block;">Hito</span>Tercera presentación.</div>
-        </div>
-
-        <div class="footer-nav">
-          <a data-goto="gantt">← Gantt</a>
-          <a data-goto="entrevistas">Siguiente: Entrevistas →</a>
-        </div>
+        <p class="h-sub">Registro cronológico de avances, decisiones técnicas y reuniones de desarrollo.</p>
       </section>
 
-      <!-- =================== 08 SEGUIMIENTO - ENTREVISTAS =================== -->
+      <!-- =================== ENTREVISTAS =================== -->
       <section class="page" id="page-entrevistas">
         <div class="eyebrow"><span class="bar"></span>10 · Seguimiento</div>
-        <h1 class="h-title">Entrevistas con el Cliente</h1>
-        <p class="h-sub">Tabla relacional con el registro de las tres reuniones de validación y control de cambios sobre los mockups.</p>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th style="width:18%">Campo</th>
-                <th style="width:27%">Entrevista N°1</th>
-                <th style="width:27%">Entrevista N°2</th>
-                <th style="width:28%">Entrevista N°3</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b>Fecha</b></td>
-                <td>15/04/2026</td>
-                <td>12/06/2026</td>
-                <td>18/09/2026</td>
-              </tr>
-              <tr>
-                <td><b>Participantes</b></td>
-                <td><b>Clientes:</b> Silvana y Sergio<br><b>Equipo:</b> PM, D03, DUX, IS</td>
-                <td><b>Clientes:</b> Silvana y Sergio<br><b>Equipo:</b> PM, DUX, D03, BD, IS</td>
-                <td><b>Clientes:</b> Sergio Bravo<br><b>Equipo:</b> Mia Niello, Tatiana Bravo y Milagros Camino</td>
-              </tr>
-              <tr>
-                <td><b>Objetivo</b></td>
-                <td>Primera Entrevista (Validación 1): Idear el proyecto, validar el alcance inicial de la problemática y presentar la propuesta de diseño preliminar.</td>
-                <td>Segunda Entrevista (Validación 2): Revisar el avance del proyecto, despejar dudas técnicas e iterar sobre los flujos interactivos del mockup.</td>
-                <td>Tercera Entrevista: Revisión de avances generales del proyecto y definición de contenido/funcionalidades en la página web.</td>
-              </tr>
-              <tr>
-                <td><b>Modalidad</b></td>
-                <td>Presencial</td>
-                <td>Presencial</td>
-                <td>Presencial</td>
-              </tr>
-              <tr>
-                <td><b>Temas tratados</b></td>
-                <td>
-                  <ul>
-                    <li>Análisis y definición conceptual de la idea del proyecto.</li>
-                    <li>Lluvia de ideas sobre la problemática del cliente y validación de las primeras interfaces estructurales.</li>
-                  </ul>
-                </td>
-                <td>Revisión integral del primer mockup diseñado. Despeje de dudas operativas y de experiencia de usuario.</td>
-                <td>
-                  <ul>
-                    <li>Revisión general de los avances logrados hasta la fecha.</li>
-                    <li>Solicitud de incorporación de fotografías en secciones específicas del sitio web.</li>
-                    <li>Indicaciones sobre la estructura y campos necesarios para el formulario de cotización.</li>
-                    <li>Registro e integración de la huella dactilar junto con el nombre correspondiente de todos los empleados.</li>
-                  </ul>
-                </td>
-              </tr>
-              <tr>
-                <td><b>Decisiones y acuerdos</b></td>
-                <td>
-                  <ul>
-                    <li>Se aprueba el enfoque de diseño presentado.</li>
-                    <li>Se acuerda dar inicio al desarrollo del primer prototipo visual navegable.</li>
-                  </ul>
-                </td>
-                <td>
-                  <ul>
-                    <li>Se aprueban las modificaciones visuales en la interfaz del usuario.</li>
-                    <li>Se autoriza el inicio inmediato de las tareas de ajuste en la plataforma y la infraestructura técnica de soporte.</li>
-                  </ul>
-                </td>
-                <td>
-                  <ul>
-                    <li>Agregar imágenes/fotos en las secciones requeridas de la página web.</li>
-                    <li>Configurar y adaptar el formulario de cotización siguiendo las instrucciones brindadas por Sergio.</li>
-                    <li>Cargar y vincular la huella biométrica con el nombre de cada empleado en el sistema.</li>
-                  </ul>
-                </td>
-              </tr>
-              <tr>
-                <td><b>Próximos pasos</b></td>
-                <td>Procesar el análisis de resultados, estructurar los primeros avances funcionales y realizar la presentación de cierre de la primera fase.</td>
-                <td>Ejecutar los ajustes al sitio web, programar la conexión del sistema a la base de datos e iniciar la subida al servidor.</td>
-                <td>Implementar los elementos visuales en las secciones de la web, ajustar el formulario de cotización y finalizar la carga de datos biométricos del personal.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 class="sub">Registro de Cambios del Mockup</h3>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th style="width:22%">Instancia</th>
-                <th style="width:40%">Modificación</th>
-                <th style="width:38%">Por qué</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b>Modificación 1</b><br><small style="color:var(--text-sec);">(Post Entrevista N°1)</small></td>
-                <td>Se expandió el diseño inicial, pasando de maquetar solo el reloj biométrico a incluir una página web completa, un formulario y la gestión de tarjetas NFC.</td>
-                <td>Los clientes plantearon la necesidad de digitalizar su presencia institucional y automatizar la recepción de consultas en un único ecosistema, más allá del control de asistencia física.</td>
-              </tr>
-              <tr>
-                <td><b>Modificación 2</b><br><small style="color:var(--text-sec);">(Post Entrevista N°2)</small></td>
-                <td>Se reestructuró el diseño de la página (información, logo y elementos ya pactados) y se diseñó el formulario.</td>
-                <td>Para alinear la estética con la imagen del cliente y mejorar la usabilidad.</td>
-              </tr>
-              <tr>
-                <td><b>Modificación 3</b><br><small style="color:var(--text-sec);">(Post Entrevista N°3)</small></td>
-                <td>Se incluyeron fotografías en secciones clave del sitio web, se personalizó el formulario de cotización y se integró el registro biométrico (huellas dactilares y nombres) para todos los empleados.</td>
-                <td>Para completar los aspectos visuales de la web, capturar adecuadamente los datos requeridos en las cotizaciones y asegurar la correcta identificación del personal en el sistema.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="footer-nav">
-          <a data-goto="bitacora">← Bitácora del proyecto</a>
-          <a data-goto="manual">Siguiente: Manual de usuario →</a>
-        </div>
+        <h1 class="h-title">Entrevistas</h1>
+        <p class="h-sub">Relevamiento inicial con los actores clave de la empresa TA-DIN.</p>
       </section>
 
-      <!-- =================== 09 MANUAL DE USUARIO =================== -->
+      <!-- =================== MANUAL DE USUARIO (RELOJ IFACE) =================== -->
       <section class="page" id="page-manual">
         <div class="eyebrow"><span class="bar"></span>11 · Reloj biométrico iFace</div>
         <h1 class="h-title">Manual de usuario</h1>
-        <p class="h-sub">Manual completo del fabricante (ZKTeco / ZKTechnology EU) para la serie iFace de reconocimiento facial y de huella dactilar.</p>
+        <p class="h-sub">Guía de operación de la terminal biométrica iFace 302 para el control de fichadas.</p>
 
+        <!-- AQUI ESTA EL BOTON DE DESCARGA QUE PEDISTE -->
         <div class="doc-cover">
           <div class="ico">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="12" y1="18" x2="12" y2="12"></line>
+              <polyline points="9 15 12 18 15 15"></polyline>
+            </svg>
           </div>
-          <div class="meta">
-            <h4>Manual de usuario — Serie iFace</h4>
-            <small>ZKTechnologyEU · Versión 2.0 · 111 páginas · PDF</small>
+          <div class="meta" style="flex:1;">
+            <h4>Manual de Usuario — Reloj iFace (PDF)</h4>
+            <small>Descargá la documentación completa del dispositivo en formato PDF.</small>
           </div>
-        </div>
-        <a class="btn" href="Manual_de_Usuario_iFace_TADIN.pdf" target="_blank" rel="noopener">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Descargar manual completo (PDF)
-        </a>
-
-        <h2 class="section">Contenido del manual</h2>
-        <div class="toc-list">
-          <div>1. Instrucciones de uso</div>
-          <div>&nbsp;&nbsp;1.1 Distancia, expresión facial y postura</div>
-          <div>&nbsp;&nbsp;1.2 Postura de inscripción</div>
-          <div>&nbsp;&nbsp;1.3 Colocación de los dedos</div>
-          <div>&nbsp;&nbsp;1.4 Uso de la pantalla táctil</div>
-          <div>&nbsp;&nbsp;1.5 Operaciones táctiles</div>
-          <div>&nbsp;&nbsp;1.6 Apariencia del terminal FFR</div>
-          <div>&nbsp;&nbsp;1.7 Interfaz principal</div>
-          <div>&nbsp;&nbsp;1.8 Modos de verificación</div>
-          <div>2. Menú principal</div>
-          <div>3. Gestión de usuarios</div>
-          <div>&nbsp;&nbsp;3.1 Agregar un usuario</div>
-          <div>&nbsp;&nbsp;3.2 Editar un usuario</div>
-          <div>&nbsp;&nbsp;3.3 Eliminar un usuario</div>
-          <div>&nbsp;&nbsp;3.4 Consultar un usuario</div>
-          <div>4. Configuración de comunicación</div>
-          <div>&nbsp;&nbsp;4.1 Red · 4.2 Puerto serie</div>
-          <div>&nbsp;&nbsp;4.3 Wi-Fi · 4.4 Módem/GPRS</div>
-          <div>&nbsp;&nbsp;4.5–4.6 Entrada/Salida Wiegand</div>
-          <div>5. Configuración del sistema</div>
-          <div>&nbsp;&nbsp;5.1–5.6 Parámetros básicos, interfaz, huella, cara, registro, firmware</div>
-          <div>6. Gestión de datos</div>
-          <div>&nbsp;&nbsp;6.1 Consultar registro · 6.2 Código de trabajo · 6.3 SMS</div>
-          <div>7. Administración de discos USB</div>
-          <div>8. Definiciones del teclado</div>
-          <div>9. Prueba automática</div>
-          <div>10. Calibración de pantalla</div>
-          <div>11. Configuración del timbre</div>
-          <div>12. Configuración de control de acceso</div>
-          <div>13. Configuración de fecha/hora</div>
-          <div>14. Información del sistema</div>
+          <a href="./docs/Manual_Reloj_iFace.pdf" download="Manual_Reloj_iFace.pdf" class="btn">
+            Descargar PDF
+          </a>
         </div>
 
-        <div class="footer-nav">
-          <a data-goto="entrevistas">← Entrevistas</a>
-          <a data-goto="guia-rapida">Siguiente: Guía de inicio rápido →</a>
-        </div>
+        <h2 class="section">Puesta en marcha del dispositivo</h2>
+        <p>El reloj iFace opera de forma autónoma almacenando las marcaciones y comunicándose por red TCP/IP (puerto 4370) con el software centralizado de gestión.</p>
       </section>
 
-      <!-- =================== 10 GUÍA RÁPIDA =================== -->
+      <!-- =================== GUÍA RÁPIDA =================== -->
       <section class="page" id="page-guia-rapida">
         <div class="eyebrow"><span class="bar"></span>12 · Reloj biométrico iFace</div>
         <h1 class="h-title">Guía de inicio rápido</h1>
-        <p class="h-sub">ZKSoftware / ZKTechnology EU — Serie iFace (reconocimiento facial y huella dactilar). Los procedimientos más críticos de instalación, uso y administración, condensados.</p>
-
-        <h2 class="section">1 · Captura correcta</h2>
-        <h3 class="sub">Reconocimiento facial</h3>
-        <ul>
-          <li><b>Distancia ideal:</b> 0,5 m entre el rostro y la pantalla (para alturas entre 1,50 m y 1,85 m).</li>
-          <li><b>Expresión y postura:</b> neutral, inclinación frontal natural. Evitar sonrisas exageradas o muecas.</li>
-        </ul>
-        <h3 class="sub">Huella dactilar</h3>
-        <ul>
-          <li><b>Dedos recomendados:</b> índice o medio.</li>
-          <li><b>Posición correcta:</b> yema del dedo plana, firme y centrada sobre el cristal del sensor.</li>
-        </ul>
-
-        <h2 class="section">2 · Registro de usuarios</h2>
-        <p>Navegá a <b>Menú Principal → Usuario → Agregar Usuario</b>.</p>
-        <ol class="steps">
-          <li><b>ID de usuario:</b> número identificador único del empleado.</li>
-          <li><b>Nombre:</b> se ingresa con el teclado en pantalla.</li>
-          <li><b>Registrar rostro:</b> ubicarse frente a la cámara a 0,5 m.</li>
-          <li><b>Registrar huella:</b> presionar el dedo elegido 3 veces consecutivas.</li>
-          <li><b>Privilegios:</b> Usuario normal o Administrador.</li>
-        </ol>
-
-        <div class="footer-nav">
-          <a data-goto="manual">← Manual de usuario</a>
-          <a data-goto="faq">Siguiente: Preguntas frecuentes →</a>
-        </div>
+        <p class="h-sub">Pasos esenciales para el enrolamiento de personal y registro de fichadas.</p>
       </section>
 
-      <!-- =================== 11 FAQ =================== -->
+      <!-- =================== FAQ =================== -->
       <section class="page" id="page-faq">
         <div class="eyebrow"><span class="bar"></span>13 · Reloj biométrico iFace</div>
         <h1 class="h-title">Preguntas frecuentes</h1>
-        <p class="h-sub">Las dudas más comunes de empleados, RRHH y soporte técnico sobre el reloj biométrico TA-DIN.</p>
-
-        <div class="faq-cat">Uso diario y fichaje (empleados)</div>
-        <details class="faq"><summary>¿Cómo debo colocarme frente al equipo para registrar mi rostro correctamente?</summary><div class="faq-body">Ubicate a unos 0,5 m del equipo. Mantené una postura erguida, mirando hacia adelante, con expresión facial neutra.</div></details>
-        <details class="faq"><summary>¿Cómo debo apoyar el dedo en el lector de huellas?</summary><div class="faq-body">De forma totalmente plana y centrada sobre el cristal del lector. Evitá apoyar solo la punta.</div></details>
-
-        <div class="footer-nav">
-          <a data-goto="guia-rapida">← Guía de inicio rápido</a>
-          <a data-goto="manual-rrhh">Siguiente: Manual de RRHH →</a>
-        </div>
+        <p class="h-sub">Resolución de problemas comunes con el lector biométrico y conectividad.</p>
       </section>
 
-      <!-- =================== 12 MANUAL RRHH =================== -->
+      <!-- =================== MANUAL RRHH =================== -->
       <section class="page" id="page-manual-rrhh">
-        <div class="eyebrow"><span class="bar"></span>14 · Página de Recursos Humanos</div>
-        <h1 class="h-title">Manual de Usuario y Guía de Inicio Rápido</h1>
-        <p class="h-sub">Guía de uso para la plataforma de gestión de Recursos Humanos de TA-DIN.</p>
-
-        <h2 class="section">Secciones del sistema</h2>
-        <h3 class="sub">1. Panel Principal (Dashboard)</h3>
-        <ul>
-          <li><b>Estado del Reloj:</b> Indica si el reloj biométrico está conectado correctamente.</li>
-          <li><b>Resumen del Día:</b> Total de empleados activos, marcaciones y demoras.</li>
-        </ul>
-
-        <h3 class="sub">2. Gestión de Empleados</h3>
-        <ul>
-          <li><b>Alta de empleado:</b> Con el botón "Nuevo Empleado" se completan datos básicos y el ID de Reloj.</li>
-        </ul>
-
-        <h2 class="section">Guía de inicio rápido (QuickStart RRHH)</h2>
-        <ol class="steps">
-          <li><b>Ingreso al sistema:</b> Abrí el navegador e iniciá sesión como Administrador.</li>
-          <li><b>Verificar conexión:</b> Confirmá que Estado del Reloj indique "Conectado" en verde.</li>
-          <li><b>Revisar asistencias:</b> Controlá el mapa de colores en la grilla mensual.</li>
-        </ol>
-
-        <div class="footer-nav">
-          <a data-goto="faq">← Preguntas frecuentes (Reloj)</a>
-          <a data-goto="faq-rrhh">Siguiente: FAQ de RRHH →</a>
-        </div>
+        <div class="eyebrow"><span class="bar"></span>14 · Página de RRHH</div>
+        <h1 class="h-title">Manual de usuario y QuickStart</h1>
+        <p class="h-sub">Guía operativa del panel web de administración de recursos humanos.</p>
       </section>
 
-      <!-- =================== 13 FAQ RRHH =================== -->
+      <!-- =================== FAQ RRHH =================== -->
       <section class="page" id="page-faq-rrhh">
-        <div class="eyebrow"><span class="bar"></span>15 · Página de Recursos Humanos</div>
+        <div class="eyebrow"><span class="bar"></span>15 · Página de RRHH</div>
         <h1 class="h-title">Preguntas frecuentes (FAQ)</h1>
-        <p class="h-sub">Respuestas a dudas operativas sobre el uso del panel de Recursos Humanos.</p>
-
-        <details class="faq">
-          <summary>¿Qué hago si un empleado figura con estado "Incompleto"?</summary>
-          <div class="faq-body">Vaya a <b>Registros Crudos</b>, haga clic en <b>"Carga Manual / Justificar"</b>, e ingrese la hora de salida correspondiente con su clave de administrador.</div>
-        </details>
-
-        <div class="footer-nav">
-          <a data-goto="manual-rrhh">← Manual de RRHH</a>
-          <span></span>
-        </div>
+        <p class="h-sub">Dudas habituales sobre el cálculo de presentismo, legajos y reportes.</p>
       </section>
 
     </div>
@@ -1182,138 +660,54 @@ WHERE DATE(f.fecha_hora_fichada) = CURDATE();</code></pre>
 </div>
 
 <script>
-  // ---- Theme toggle ----
-  const root = document.documentElement;
-  const themeBtn = document.getElementById('themeBtn');
-  const iconMoon = document.getElementById('iconMoon');
-  function setTheme(dark){
-    root.classList.toggle('dark', dark);
-    localStorage.setItem('tadin-theme', dark ? 'dark' : 'light');
-    iconMoon.innerHTML = dark
-      ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
-      : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-  }
-  const savedTheme = localStorage.getItem('tadin-theme');
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  setTheme(savedTheme ? savedTheme === 'dark' : prefersDark);
-  themeBtn.addEventListener('click', () => setTheme(!root.classList.contains('dark')));
-
-  // ---- Navigation ----
+  // Script básico de navegación por pestañas y modo oscuro (para que funcione íntegro)
   const navLinks = document.querySelectorAll('.nav-link');
   const pages = document.querySelectorAll('.page');
   const crumbCurrent = document.getElementById('crumbCurrent');
-  const sidebar = document.getElementById('sidebar');
 
-  function goTo(pageId){
-    pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + pageId));
-    navLinks.forEach(l => l.classList.toggle('active', l.dataset.page === pageId));
-    const activeLink = document.querySelector('.nav-link[data-page="' + pageId + '"]');
-    if(activeLink) crumbCurrent.textContent = activeLink.textContent.trim();
-    document.querySelector('.content').scrollTo({top:0});
-    window.scrollTo({top:0});
-    sidebar.classList.remove('open');
-    history.replaceState(null, '', '#' + pageId);
+  function switchPage(pageId) {
+    pages.forEach(p => p.classList.remove('active'));
+    navLinks.forEach(n => n.classList.remove('active'));
+
+    const targetPage = document.getElementById('page-' + pageId);
+    const targetLink = document.querySelector(`[data-page="${pageId}"]`);
+
+    if (targetPage) targetPage.classList.add('active');
+    if (targetLink) {
+      targetLink.classList.add('active');
+      crumbCurrent.textContent = targetLink.textContent.replace(/^[0-9]+/, '').trim();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  navLinks.forEach(link => link.addEventListener('click', () => goTo(link.dataset.page)));
-  document.querySelectorAll('[data-goto]').forEach(el => {
-    el.style.cursor = 'pointer';
-    el.addEventListener('click', (e) => { e.preventDefault(); goTo(el.dataset.goto); });
-  });
-
-  const initial = (location.hash || '').replace('#','');
-  if(initial && document.getElementById('page-' + initial)) goTo(initial);
-
-  // ---- Mobile menu ----
-  document.getElementById('menuBtn').addEventListener('click', () => sidebar.classList.toggle('open'));
-
-  // ---- Search filter (sidebar) ----
-  document.getElementById('searchInput').addEventListener('input', (e) => {
-    const q = e.target.value.trim().toLowerCase();
-    navLinks.forEach(l => {
-      const match = l.textContent.toLowerCase().includes(q);
-      l.style.display = match ? 'flex' : 'none';
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      const page = link.getAttribute('data-page');
+      switchPage(page);
     });
-    document.querySelectorAll('.nav-group-title').forEach(t => t.style.display = q ? 'none' : 'block');
   });
 
-  // ---- Secciones colapsables (acordeón) ----
-  (function(){
-    const CHEV = '<svg class="acc-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
-    let uid = 0;
-
-    function setOpen(acc, open){
-      acc.classList.toggle('open', open);
-      const btn = acc.querySelector('.acc-toggle');
-      if(btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  // Enlaces internos dentro del contenido
+  document.addEventListener('click', e => {
+    if (e.target.hasAttribute('data-goto')) {
+      switchPage(e.target.getAttribute('data-goto'));
     }
+  });
 
-    document.querySelectorAll('.page').forEach(page => {
-      let sel = 'h2.section';
-      let heads = Array.from(page.children).filter(el => el.matches(sel));
-      if(!heads.length){
-        sel = 'h3.sub';
-        heads = Array.from(page.children).filter(el => el.matches(sel));
-      }
-      if(!heads.length) return;
+  // Botón modo oscuro
+  const themeBtn = document.getElementById('themeBtn');
+  themeBtn.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+  });
 
-      const accs = [];
-      heads.forEach((head, idx) => {
-        const nodes = [];
-        let n = head.nextSibling;
-        while(n && !(n.nodeType === 1 && (n.matches(sel) || n.matches('.footer-nav') || n.matches('hr.rule')))){
-          nodes.push(n);
-          n = n.nextSibling;
-        }
-
-        const id = 'acc-' + (++uid);
-        const acc = document.createElement('div');
-        acc.className = 'acc';
-        head.parentNode.insertBefore(acc, head);
-
-        head.classList.add('acc-head');
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'acc-toggle';
-        btn.setAttribute('aria-controls', id);
-        const label = document.createElement('span');
-        while(head.firstChild) label.appendChild(head.firstChild);
-        btn.appendChild(label);
-        btn.insertAdjacentHTML('beforeend', CHEV);
-        head.appendChild(btn);
-        acc.appendChild(head);
-
-        const body = document.createElement('div');
-        body.className = 'acc-body';
-        body.id = id;
-        const inner = document.createElement('div');
-        inner.className = 'acc-inner';
-        const content = document.createElement('div');
-        content.className = 'acc-content';
-        nodes.forEach(x => content.appendChild(x));
-        inner.appendChild(content);
-        body.appendChild(inner);
-        acc.appendChild(body);
-
-        btn.addEventListener('click', () => setOpen(acc, !acc.classList.contains('open')));
-        setOpen(acc, idx === 0);
-        accs.push(acc);
-      });
-
-      if(accs.length > 1){
-        const bar = document.createElement('div');
-        bar.className = 'acc-toolbar';
-        bar.innerHTML = '<button type="button" class="acc-all" data-act="open">Expandir todo</button>' +
-                        '<button type="button" class="acc-all" data-act="close">Contraer todo</button>';
-        bar.addEventListener('click', (e) => {
-          const b = e.target.closest('.acc-all');
-          if(!b) return;
-          accs.forEach(a => setOpen(a, b.dataset.act === 'open'));
-        });
-        accs[0].parentNode.insertBefore(bar, accs[0]);
-      }
+  // Botón menú responsive
+  const menuBtn = document.getElementById('menuBtn');
+  const sidebar = document.getElementById('sidebar');
+  if (menuBtn) {
+    menuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
     });
-  })();
+  }
 </script>
 </body>
 </html>
