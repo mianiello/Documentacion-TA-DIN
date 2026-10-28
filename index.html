@@ -1131,6 +1131,9 @@ WHERE DATE(f.fecha_hora_fichada) = CURDATE();</code></pre>
         <div class="faq-cat">Uso diario y fichaje (empleados)</div>
         <details class="faq"><summary>¿Cómo debo colocarme frente al equipo para registrar mi rostro correctamente?</summary><div class="faq-body">Ubicate a unos 0,5 m del equipo. Mantené una postura erguida, mirando hacia adelante, con expresión facial neutra.</div></details>
         <details class="faq"><summary>¿Cómo debo apoyar el dedo en el lector de huellas?</summary><div class="faq-body">De forma totalmente plana y centrada sobre el cristal del lector. Evitá apoyar solo la punta.</div></details>
+        <details class="faq"><summary>¿Qué pasa si el reloj biométrico (iFace) no me reconoce la huella o el rostro al entrar a trabajar?</summary><div class="faq-body">Puede suceder si tenés las manos sucias con restos de polvo de recubrimiento industrial, humedad o si te parás mal frente a la cámara infrarroja.<br><br><b>Consejo:</b> intentá limpiar levemente el escáner de huellas o pararte a unos 50-70 cm de la terminal de rostro, asegurándote una buena iluminación.<br><br>Si el problema persiste, el reloj suele permitir métodos alternativos (como código PIN personal) y, si aun así no te toma, avisale inmediatamente a administración para que verifiquen tu marcación manual del día sin que corra riesgo tu presentismo.</div></details>
+        <details class="faq"><summary>¿Cómo sé si el reloj registró bien mi entrada o mi salida?</summary><div class="faq-body">Al apoyar el dedo o pararte frente al lente, la terminal iFace emite una señal sonora de confirmación y muestra en su pantalla un mensaje visual con tu nombre y la hora exacta del fichaje (ej. "Verificación exitosa"). Esa confirmación instantánea te garantiza que el dato ya viajó en tiempo real hacia el sistema.</div></details>
+        <details class="faq"><summary>Si llego unos minutos tarde por un inconveniente de transporte, ¿cómo impacta en el sistema?</summary><div class="faq-body">El reloj registra la hora exacta en el momento en que realizás la marcación. Si superás el margen de tolerancia configurado por la empresa, el sistema marcará automáticamente la llegada tarde en el reporte diario. Ante cualquier imprevisto de fuerza mayor, lo ideal es avisar a administración para que puedan justificar la demora en el panel web y evitar descuentos indebidos en tu presentismo.</div></details>
 
         <div class="footer-nav">
           <a data-goto="guia-rapida">← Guía de inicio rápido</a>
@@ -1178,6 +1181,22 @@ WHERE DATE(f.fecha_hora_fichada) = CURDATE();</code></pre>
         <details class="faq">
           <summary>¿Qué hago si un empleado figura con estado "Incompleto"?</summary>
           <div class="faq-body">Vaya a <b>Registros Crudos</b>, haga clic en <b>"Carga Manual / Justificar"</b>, e ingrese la hora de salida correspondiente con su clave de administrador.</div>
+        </details>
+        <details class="faq">
+          <summary>¿Qué hago si un operario fichó tarde o se olvidó de registrar la entrada/salida en el reloj biométrico?</summary>
+          <div class="faq-body">No hace falta modificar los registros físicos en el dispositivo ni recurrir a planillas de papel. Desde el panel web de Recursos Humanos, ingresá a la sección de <b>Gestión de Asistencia / Fichadas</b>, buscá al empleado por su legajo o nombre, y utilizá la opción de <b>Ajuste Manual de Registro</b>. El sistema te pedirá justificar el motivo (ej. olvido, trámite laboral, llegada tarde justificada) y dejará trazabilidad del cambio para mantener la transparencia de cara a la auditoría ISO 9001.</div>
+        </details>
+        <details class="faq">
+          <summary>¿Cómo se exportan los datos del reloj para calcular el presentismo y los sueldos a fin de mes?</summary>
+          <div class="faq-body">Olvidate de contar horas a mano o cruzar planillas en papel. El panel de RRHH cuenta con una herramienta de <b>Exportación Nativa a Excel</b> (y generación de reportes filtrados por rango de fechas). El sistema procesa de forma automática las horas trabajadas, horas extras y llegadas tarde mediante consultas SQL optimizadas, entregándote el consolidado listo para liquidar haberes en pocos clics.</div>
+        </details>
+        <details class="faq">
+          <summary>¿Cómo se da de alta a un nuevo operario de planta en el sistema?</summary>
+          <div class="faq-body">El proceso es dual pero rápido:<ol style="margin:8px 0 8px;padding-left:22px;"><li>Primero, creás el <b>legajo del empleado</b> en el Panel Web de RRHH completando sus datos personales y laborales.</li><li>Luego, registrás sus <b>datos biométricos</b> (huella dactilar y/o rostro) directamente en la terminal iFace (ZKTeco) de la entrada.</li></ol>Una vez sincronizado el equipo mediante la red local (vía puerto TCP/IP 4370 o middleware), el nuevo trabajador quedará habilitado automáticamente tanto para fichar como para figurar en los reportes del panel administrativo.</div>
+        </details>
+        <details class="faq">
+          <summary>¿Qué nivel de seguridad y permisos tiene el panel de RRHH?</summary>
+          <div class="faq-body">El panel está diseñado exclusivamente para uso del personal administrativo autorizado (en este caso, la administración y gerencia a cargo). Está protegido por autenticación segura para evitar modificaciones no autorizadas en los legajos, sueldos o registros de presentismo, garantizando la confidencialidad de la información del personal en línea con los estándares de calidad de la empresa.</div>
         </details>
 
         <div class="footer-nav">
